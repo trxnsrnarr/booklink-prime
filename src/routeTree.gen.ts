@@ -16,6 +16,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MyStoriesRouteImport } from './routes/my-stories'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
@@ -23,7 +24,9 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WriteStoryIdRouteImport } from './routes/write_.$storyId'
 import { Route as StorySlugRouteImport } from './routes/story.$slug'
+import { Route as ReadChapterIdRouteImport } from './routes/read.$chapterId'
 
 const WriteRoute = WriteRouteImport.update({
   id: '/write',
@@ -58,6 +61,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyStoriesRoute = MyStoriesRouteImport.update({
@@ -95,9 +103,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WriteStoryIdRoute = WriteStoryIdRouteImport.update({
+  id: '/write_/$storyId',
+  path: '/write/$storyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StorySlugRoute = StorySlugRouteImport.update({
   id: '/story/$slug',
   path: '/story/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadChapterIdRoute = ReadChapterIdRouteImport.update({
+  id: '/read/$chapterId',
+  path: '/read/$chapterId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -109,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/my-stories': typeof MyStoriesRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -116,7 +135,9 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof TransactionsRoute
   '/wallet': typeof WalletRoute
   '/write': typeof WriteRoute
+  '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
+  '/write/$storyId': typeof WriteStoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -126,6 +147,7 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/my-stories': typeof MyStoriesRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -133,7 +155,9 @@ export interface FileRoutesByTo {
   '/transactions': typeof TransactionsRoute
   '/wallet': typeof WalletRoute
   '/write': typeof WriteRoute
+  '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
+  '/write/$storyId': typeof WriteStoryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -144,6 +168,7 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/my-stories': typeof MyStoriesRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -151,7 +176,9 @@ export interface FileRoutesById {
   '/transactions': typeof TransactionsRoute
   '/wallet': typeof WalletRoute
   '/write': typeof WriteRoute
+  '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
+  '/write_/$storyId': typeof WriteStoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -163,6 +190,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/login'
     | '/my-stories'
+    | '/notifications'
     | '/profile'
     | '/register'
     | '/reset-password'
@@ -170,7 +198,9 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/wallet'
     | '/write'
+    | '/read/$chapterId'
     | '/story/$slug'
+    | '/write/$storyId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -180,6 +210,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/login'
     | '/my-stories'
+    | '/notifications'
     | '/profile'
     | '/register'
     | '/reset-password'
@@ -187,7 +218,9 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/wallet'
     | '/write'
+    | '/read/$chapterId'
     | '/story/$slug'
+    | '/write/$storyId'
   id:
     | '__root__'
     | '/'
@@ -197,6 +230,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/login'
     | '/my-stories'
+    | '/notifications'
     | '/profile'
     | '/register'
     | '/reset-password'
@@ -204,7 +238,9 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/wallet'
     | '/write'
+    | '/read/$chapterId'
     | '/story/$slug'
+    | '/write_/$storyId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -215,6 +251,7 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   MyStoriesRoute: typeof MyStoriesRoute
+  NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -222,7 +259,9 @@ export interface RootRouteChildren {
   TransactionsRoute: typeof TransactionsRoute
   WalletRoute: typeof WalletRoute
   WriteRoute: typeof WriteRoute
+  ReadChapterIdRoute: typeof ReadChapterIdRoute
   StorySlugRoute: typeof StorySlugRoute
+  WriteStoryIdRoute: typeof WriteStoryIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -276,6 +315,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my-stories': {
       id: '/my-stories'
       path: '/my-stories'
@@ -325,11 +371,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/write_/$storyId': {
+      id: '/write_/$storyId'
+      path: '/write/$storyId'
+      fullPath: '/write/$storyId'
+      preLoaderRoute: typeof WriteStoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/story/$slug': {
       id: '/story/$slug'
       path: '/story/$slug'
       fullPath: '/story/$slug'
       preLoaderRoute: typeof StorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/read/$chapterId': {
+      id: '/read/$chapterId'
+      path: '/read/$chapterId'
+      fullPath: '/read/$chapterId'
+      preLoaderRoute: typeof ReadChapterIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -343,6 +403,7 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   MyStoriesRoute: MyStoriesRoute,
+  NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -350,8 +411,20 @@ const rootRouteChildren: RootRouteChildren = {
   TransactionsRoute: TransactionsRoute,
   WalletRoute: WalletRoute,
   WriteRoute: WriteRoute,
+  ReadChapterIdRoute: ReadChapterIdRoute,
   StorySlugRoute: StorySlugRoute,
+  WriteStoryIdRoute: WriteStoryIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

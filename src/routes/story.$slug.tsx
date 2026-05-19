@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Eye, Heart, MessageCircle, BookOpen, Crown, Star, Plus, Coins } from "lucide-react";
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/story/$slug")({
 function StoryDetail() {
   const { slug } = Route.useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const storyQ = useQuery({
     queryKey: ["story", slug],
@@ -119,7 +120,7 @@ function StoryDetail() {
             <button
               onClick={() => {
                 const first = chaptersQ.data?.[0];
-                if (first) toast.success(`Buka: ${first.title}`);
+                if (first) navigate({ to: "/read/$chapterId", params: { chapterId: first.id } });
                 else toast.info("Belum ada chapter tersedia.");
               }}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-medium shadow-glow hover:shadow-warm transition-all"
@@ -152,8 +153,9 @@ function StoryDetail() {
           <ul className="space-y-2">
             {chaptersQ.data.map((c) => (
               <li key={c.id}>
-                <button
-                  onClick={() => toast.info(`"${c.title}" — reader mode akan dibuka di fase berikutnya.`)}
+                <Link
+                  to="/read/$chapterId"
+                  params={{ chapterId: c.id }}
                   className="w-full text-left glass rounded-xl p-4 hover:bg-accent/40 transition-all flex items-center justify-between"
                 >
                   <div>
@@ -161,7 +163,7 @@ function StoryDetail() {
                     <p className="text-xs text-muted-foreground mt-0.5">{c.word_count} kata · {formatNumber(c.reader_count)} pembaca</p>
                   </div>
                   {c.is_premium && <Crown className="h-4 w-4 text-gold" />}
-                </button>
+                </Link>
               </li>
             ))}
           </ul>

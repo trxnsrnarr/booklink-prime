@@ -3,22 +3,27 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Search, Library, Wallet, PenLine, Info, User as UserIcon, LogOut, Settings, Receipt, BookMarked, Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useI18n } from "@/hooks/use-i18n";
 import { supabase } from "@/integrations/supabase/client";
-
-const NAV_ITEMS = [
-  { to: "/", label: "Home", icon: BookOpen },
-  { to: "/explore", label: "Explore", icon: Search },
-  { to: "/library", label: "Library", icon: Library },
-  { to: "/wallet", label: "Wallet", icon: Wallet },
-  { to: "/write", label: "Write", icon: PenLine },
-  { to: "/about", label: "About", icon: Info },
-];
+import { ThemeToggle } from "./ThemeToggle";
+import { LanguageToggle } from "./LanguageToggle";
+import { NotificationsBell } from "./NotificationsBell";
 
 export function Navbar() {
   const { user, profile } = useAuth();
+  const { t } = useI18n();
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const NAV_ITEMS = [
+    { to: "/", label: t("nav.home"), icon: BookOpen },
+    { to: "/explore", label: t("nav.explore"), icon: Search },
+    { to: "/library", label: t("nav.library"), icon: Library },
+    { to: "/wallet", label: t("nav.wallet"), icon: Wallet },
+    { to: "/write", label: t("nav.write"), icon: PenLine },
+    { to: "/about", label: t("nav.about"), icon: Info },
+  ];
 
   const handleLogout = async () => {
     setDropdownOpen(false);
@@ -31,9 +36,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full">
       <div className="glass-strong border-b border-border/60">
-        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 gap-2">
+          <Link to="/" className="flex items-center gap-2 group shrink-0">
             <div className="relative">
               <BookOpen className="h-7 w-7 text-primary transition-transform group-hover:scale-110" />
               <div className="absolute inset-0 blur-lg bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -41,8 +45,7 @@ export function Navbar() {
             <span className="font-display text-xl font-bold text-gradient-warm">BookLink</span>
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.to}
@@ -56,8 +59,12 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Right side */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <div className="hidden sm:flex items-center gap-1.5">
+              <LanguageToggle />
+              <ThemeToggle />
+              <NotificationsBell />
+            </div>
             {user ? (
               <div className="relative">
                 <button
@@ -68,7 +75,7 @@ export function Navbar() {
                   <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary-glow text-primary-foreground flex items-center justify-center text-sm font-semibold shadow-glow">
                     {initial}
                   </div>
-                  <span className="hidden sm:inline text-sm font-medium max-w-[120px] truncate">
+                  <span className="hidden sm:inline text-sm font-medium max-w-[100px] truncate">
                     {profile?.username ?? "..."}
                   </span>
                 </button>
@@ -89,18 +96,18 @@ export function Navbar() {
                           <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                           <div className="mt-2 flex items-center gap-2 text-xs">
                             <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-gold/30 to-primary/20 text-foreground font-medium">
-                              {profile?.coin_balance ?? 0} coins
+                              {profile?.coin_balance ?? 0} {t("nav.coins")}
                             </span>
                           </div>
                         </div>
                         <div className="py-1">
                           {[
-                            { to: "/profile", icon: UserIcon, label: "Profile" },
-                            { to: "/wallet", icon: Wallet, label: "Wallet" },
-                            { to: "/library", icon: Library, label: "Library" },
-                            { to: "/my-stories", icon: BookMarked, label: "My Stories" },
-                            { to: "/transactions", icon: Receipt, label: "Transactions" },
-                            { to: "/settings", icon: Settings, label: "Settings" },
+                            { to: "/profile", icon: UserIcon, label: t("nav.profile") },
+                            { to: "/wallet", icon: Wallet, label: t("nav.wallet") },
+                            { to: "/library", icon: Library, label: t("nav.library") },
+                            { to: "/my-stories", icon: BookMarked, label: t("nav.myStories") },
+                            { to: "/transactions", icon: Receipt, label: t("nav.transactions") },
+                            { to: "/settings", icon: Settings, label: t("nav.settings") },
                           ].map((it) => (
                             <Link
                               key={it.to}
@@ -119,7 +126,7 @@ export function Navbar() {
                             className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors"
                           >
                             <LogOut className="h-4 w-4" />
-                            Logout
+                            {t("nav.logout")}
                           </button>
                         </div>
                       </motion.div>
@@ -131,21 +138,21 @@ export function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+                  className="hidden sm:inline-flex px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
                 >
-                  Login
+                  {t("nav.login")}
                 </Link>
                 <Link
                   to="/register"
                   className="px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow hover:shadow-warm transition-all"
                 >
-                  Sign Up
+                  {t("nav.signup")}
                 </Link>
               </>
             )}
 
             <button
-              className="md:hidden p-2 rounded-lg hover:bg-accent/50"
+              className="lg:hidden p-2 rounded-lg hover:bg-accent/50"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Menu"
             >
@@ -154,14 +161,13 @@ export function Navbar() {
           </div>
         </nav>
 
-        {/* Mobile menu */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden border-t border-border/60"
+              className="lg:hidden overflow-hidden border-t border-border/60"
             >
               <div className="px-4 py-3 space-y-1">
                 {NAV_ITEMS.map((item) => (
@@ -175,6 +181,11 @@ export function Navbar() {
                     {item.label}
                   </Link>
                 ))}
+                <div className="flex sm:hidden items-center gap-2 px-3 pt-3 border-t border-border/60">
+                  <LanguageToggle />
+                  <ThemeToggle />
+                  <NotificationsBell />
+                </div>
               </div>
             </motion.div>
           )}
