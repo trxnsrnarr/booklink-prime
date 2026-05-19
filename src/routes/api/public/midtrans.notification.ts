@@ -57,7 +57,7 @@ export const Route = createFileRoute("/api/public/midtrans/notification")({
           _order_id: orderId,
           _status: mapped,
           _payment_type: paymentType,
-          _midtrans: payload,
+          _midtrans: JSON.parse(JSON.stringify(payload)),
         });
         if (error) {
           console.error("fulfill_transaction error", error);
