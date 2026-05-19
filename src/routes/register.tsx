@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User as UserIcon, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
