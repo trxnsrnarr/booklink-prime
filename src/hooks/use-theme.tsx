@@ -29,6 +29,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.classList.toggle("dark", theme === "dark");
     root.style.colorScheme = theme;
     localStorage.setItem(STORAGE_KEY, theme);
+    // enable transitions only after first paint to avoid flash
+    requestAnimationFrame(() => root.classList.add("theme-ready"));
   }, [theme, mounted]);
 
   const setTheme = (t: Theme) => setThemeState(t);
