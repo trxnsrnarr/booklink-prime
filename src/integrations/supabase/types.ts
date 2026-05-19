@@ -61,6 +61,42 @@ export type Database = {
           },
         ]
       }
+      coin_packages: {
+        Row: {
+          bonus_coin: number
+          coin_amount: number
+          created_at: string
+          id: string
+          is_active: boolean
+          is_popular: boolean
+          name: string
+          price_idr: number
+          sort_order: number
+        }
+        Insert: {
+          bonus_coin?: number
+          coin_amount: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_popular?: boolean
+          name: string
+          price_idr: number
+          sort_order?: number
+        }
+        Update: {
+          bonus_coin?: number
+          coin_amount?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_popular?: boolean
+          name?: string
+          price_idr?: number
+          sort_order?: number
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
@@ -245,6 +281,7 @@ export type Database = {
           is_verified: boolean
           updated_at: string
           username: string
+          vip_until: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -256,6 +293,7 @@ export type Database = {
           is_verified?: boolean
           updated_at?: string
           username: string
+          vip_until?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -267,6 +305,7 @@ export type Database = {
           is_verified?: boolean
           updated_at?: string
           username?: string
+          vip_until?: string | null
         }
         Relationships: []
       }
@@ -356,12 +395,78 @@ export type Database = {
           },
         ]
       }
+      transactions: {
+        Row: {
+          amount_idr: number
+          bonus_coin: number
+          coin_amount: number
+          created_at: string
+          id: string
+          midtrans_response: Json | null
+          order_id: string
+          paid_at: string | null
+          payment_type: string | null
+          snap_token: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_idr: number
+          bonus_coin?: number
+          coin_amount: number
+          created_at?: string
+          id?: string
+          midtrans_response?: Json | null
+          order_id: string
+          paid_at?: string | null
+          payment_type?: string | null
+          snap_token?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_idr?: number
+          bonus_coin?: number
+          coin_amount?: number
+          created_at?: string
+          id?: string
+          midtrans_response?: Json | null
+          order_id?: string
+          paid_at?: string | null
+          payment_type?: string | null
+          snap_token?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_pending_transaction: {
+        Args: {
+          _amount_idr: number
+          _bonus_coin: number
+          _coin_amount: number
+          _order_id: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      fulfill_transaction: {
+        Args: {
+          _midtrans: Json
+          _order_id: string
+          _payment_type: string
+          _status: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

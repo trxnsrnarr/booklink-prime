@@ -27,6 +27,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as WriteStoryIdRouteImport } from './routes/write_.$storyId'
 import { Route as StorySlugRouteImport } from './routes/story.$slug'
 import { Route as ReadChapterIdRouteImport } from './routes/read.$chapterId'
+import { Route as ApiPublicMidtransNotificationRouteImport } from './routes/api/public/midtrans.notification'
 
 const WriteRoute = WriteRouteImport.update({
   id: '/write',
@@ -118,6 +119,12 @@ const ReadChapterIdRoute = ReadChapterIdRouteImport.update({
   path: '/read/$chapterId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMidtransNotificationRoute =
+  ApiPublicMidtransNotificationRouteImport.update({
+    id: '/api/public/midtrans/notification',
+    path: '/api/public/midtrans/notification',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/write/$storyId': typeof WriteStoryIdRoute
+  '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,6 +166,7 @@ export interface FileRoutesByTo {
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/write/$storyId': typeof WriteStoryIdRoute
+  '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,6 +188,7 @@ export interface FileRoutesById {
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/write_/$storyId': typeof WriteStoryIdRoute
+  '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/read/$chapterId'
     | '/story/$slug'
     | '/write/$storyId'
+    | '/api/public/midtrans/notification'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/read/$chapterId'
     | '/story/$slug'
     | '/write/$storyId'
+    | '/api/public/midtrans/notification'
   id:
     | '__root__'
     | '/'
@@ -241,6 +253,7 @@ export interface FileRouteTypes {
     | '/read/$chapterId'
     | '/story/$slug'
     | '/write_/$storyId'
+    | '/api/public/midtrans/notification'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -262,6 +275,7 @@ export interface RootRouteChildren {
   ReadChapterIdRoute: typeof ReadChapterIdRoute
   StorySlugRoute: typeof StorySlugRoute
   WriteStoryIdRoute: typeof WriteStoryIdRoute
+  ApiPublicMidtransNotificationRoute: typeof ApiPublicMidtransNotificationRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -392,6 +406,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReadChapterIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/midtrans/notification': {
+      id: '/api/public/midtrans/notification'
+      path: '/api/public/midtrans/notification'
+      fullPath: '/api/public/midtrans/notification'
+      preLoaderRoute: typeof ApiPublicMidtransNotificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -414,17 +435,8 @@ const rootRouteChildren: RootRouteChildren = {
   ReadChapterIdRoute: ReadChapterIdRoute,
   StorySlugRoute: StorySlugRoute,
   WriteStoryIdRoute: WriteStoryIdRoute,
+  ApiPublicMidtransNotificationRoute: ApiPublicMidtransNotificationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
