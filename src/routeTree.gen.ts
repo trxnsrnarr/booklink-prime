@@ -24,7 +24,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as WriteStoryIdRouteImport } from './routes/write.$storyId'
+import { Route as WriteStoryIdRouteImport } from './routes/write_.$storyId'
 import { Route as StorySlugRouteImport } from './routes/story.$slug'
 import { Route as ReadChapterIdRouteImport } from './routes/read.$chapterId'
 
@@ -104,9 +104,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const WriteStoryIdRoute = WriteStoryIdRouteImport.update({
-  id: '/$storyId',
-  path: '/$storyId',
-  getParentRoute: () => WriteRoute,
+  id: '/write_/$storyId',
+  path: '/write/$storyId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const StorySlugRoute = StorySlugRouteImport.update({
   id: '/story/$slug',
@@ -134,7 +134,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
   '/wallet': typeof WalletRoute
-  '/write': typeof WriteRouteWithChildren
+  '/write': typeof WriteRoute
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/write/$storyId': typeof WriteStoryIdRoute
@@ -154,7 +154,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
   '/wallet': typeof WalletRoute
-  '/write': typeof WriteRouteWithChildren
+  '/write': typeof WriteRoute
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/write/$storyId': typeof WriteStoryIdRoute
@@ -175,10 +175,10 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
   '/wallet': typeof WalletRoute
-  '/write': typeof WriteRouteWithChildren
+  '/write': typeof WriteRoute
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
-  '/write/$storyId': typeof WriteStoryIdRoute
+  '/write_/$storyId': typeof WriteStoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -240,7 +240,7 @@ export interface FileRouteTypes {
     | '/write'
     | '/read/$chapterId'
     | '/story/$slug'
-    | '/write/$storyId'
+    | '/write_/$storyId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -258,9 +258,10 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   TransactionsRoute: typeof TransactionsRoute
   WalletRoute: typeof WalletRoute
-  WriteRoute: typeof WriteRouteWithChildren
+  WriteRoute: typeof WriteRoute
   ReadChapterIdRoute: typeof ReadChapterIdRoute
   StorySlugRoute: typeof StorySlugRoute
+  WriteStoryIdRoute: typeof WriteStoryIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -370,12 +371,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/write/$storyId': {
-      id: '/write/$storyId'
-      path: '/$storyId'
+    '/write_/$storyId': {
+      id: '/write_/$storyId'
+      path: '/write/$storyId'
       fullPath: '/write/$storyId'
       preLoaderRoute: typeof WriteStoryIdRouteImport
-      parentRoute: typeof WriteRoute
+      parentRoute: typeof rootRouteImport
     }
     '/story/$slug': {
       id: '/story/$slug'
@@ -394,16 +395,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface WriteRouteChildren {
-  WriteStoryIdRoute: typeof WriteStoryIdRoute
-}
-
-const WriteRouteChildren: WriteRouteChildren = {
-  WriteStoryIdRoute: WriteStoryIdRoute,
-}
-
-const WriteRouteWithChildren = WriteRoute._addFileChildren(WriteRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -419,10 +410,21 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   TransactionsRoute: TransactionsRoute,
   WalletRoute: WalletRoute,
-  WriteRoute: WriteRouteWithChildren,
+  WriteRoute: WriteRoute,
   ReadChapterIdRoute: ReadChapterIdRoute,
   StorySlugRoute: StorySlugRoute,
+  WriteStoryIdRoute: WriteStoryIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
