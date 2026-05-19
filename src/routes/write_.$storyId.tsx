@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 
-export const Route = createFileRoute("/write/$storyId")({ component: StoryEditor });
+export const Route = createFileRoute("/write_/$storyId")({ component: StoryEditor });
 
 function StoryEditor() {
   const { storyId } = Route.useParams();
